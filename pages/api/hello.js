@@ -1,6 +1,14 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import nextConnect from "next-connect";
+import middleware from "../../middleware/database";
 
-export default (req, res) => {
-  res.statusCode = 200
-  res.json({ name: 'John Doe' })
-}
+const handler = nextConnect();
+
+handler.use(middleware);
+
+handler.get(async (req, res) => {
+  let doc = await req.db.collection("films").findOne();
+
+  res.json(doc);
+});
+
+export default handler;
